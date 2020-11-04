@@ -7,7 +7,7 @@ namespace web.Services
     {
         private Timer _timer;
         public event Action OnElapsed;
-
+        
         public void SetTimer(double intervalMilliseconds, bool repeat)
         {
             _timer = new Timer(intervalMilliseconds);
