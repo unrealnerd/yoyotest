@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using web.Data;
+using web.Models;
 using web.Services;
 
 namespace web
@@ -29,9 +33,20 @@ namespace web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<YoyoTimer>();
             services.AddTransient<YoyoDataService>();
+
+            services.Configure<FileRepositoryOptions>(Configuration.GetSection(FileRepositoryOptions.FileRepository));
+            
+            services.AddSingleton(sp => new Repository<Shuttle>(
+                logger: sp.GetService<ILogger<Repository<Shuttle>>>(),
+                environment: sp.GetService<IWebHostEnvironment>(),
+                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Shuttles));
+            
+            services.AddSingleton(sp => new Repository<Athlete>(
+                logger: sp.GetService<ILogger<Repository<Athlete>>>(),
+                environment: sp.GetService<IWebHostEnvironment>(),
+                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Athletes));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
