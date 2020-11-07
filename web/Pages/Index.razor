@@ -1,8 +1,5 @@
 ﻿@page "/"
-@using web.Models
-@inject web.Services.YoyoTimer YoyoTimer
-@inject web.Services.YoyoDataService YoyoDataService
-@inject web.Data.Repository<Athlete> AthleteRepository
+
 
 <div class="container">
     <div class="row justify-content-center">
@@ -76,47 +73,4 @@
         }
     </div>
 </div>
-@code {
-    public bool Started { get; set; } = false;
-    private TimeSpan totalTime { get; set; }
-    private TimeSpan currentShuttleTimeLeft { get; set; }
-    private int accumulatedDistance { get; set; } = 0;
-    private Shuttle currentShuttle { get; set; }
 
-    private void Start()
-    {
-        YoyoTimer.SetTimer(1000, true);
-        YoyoTimer.OnElapsed += async delegate
-        {
-            await Tick();
-        };
-        YoyoDataService.OnShuttleChanged += async (newShuttle) =>
-        {
-
-            await UpdateShuttle(newShuttle);
-            Console.WriteLine("incoming shuttle");
-        };
-        YoyoDataService.Start();
-        Started = true;
-    }
-
-    private async Task UpdateShuttle(Shuttle newShuttle)
-    {
-        currentShuttle = newShuttle;
-        currentShuttleTimeLeft = TimeSpan.ParseExact(currentShuttle.CommulativeTime, @"mm\:ss", System.Globalization.CultureInfo.InvariantCulture,
-                                              System.Globalization.TimeSpanStyles.None);
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task Tick()
-    {
-        totalTime = totalTime.Add(new TimeSpan(0, 0, 1));
-        currentShuttleTimeLeft = currentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-
-
-}
