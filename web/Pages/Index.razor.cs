@@ -15,13 +15,14 @@ namespace web.Pages
         [Inject] YoyoTimer YoyoTimer { get; set; }
         [Inject] YoyoDataService YoyoDataService { get; set; }
         [Inject] Repository<Athlete> AthleteRepository { get; set; }
-        [Inject] ILogger<Index> Logger { get; set; }
+        [Inject] ILogger<Index> _logger { get; set; }
 
         public bool Started { get; set; } = false;
         private TimeSpan TotalTime { get; set; }
         private TimeSpan CurrentShuttleTimeLeft { get; set; }
         private Shuttle CurrentShuttle { get; set; }
         private Shuttle PreviousShuttle { get; set; }
+        private double PercentageRemaingInCurrentLevel { get; set; }
 
         private void Start()
         {
@@ -34,7 +35,7 @@ namespace web.Pages
             {
 
                 await UpdateShuttle(newShuttle);
-                Console.WriteLine("incoming shuttle");
+                _logger.LogDebug("shuttle changed");
             };
             YoyoDataService.Start();
             Started = true;
@@ -44,8 +45,16 @@ namespace web.Pages
         {
             PreviousShuttle = CurrentShuttle;
             CurrentShuttle = newShuttle;
-            CurrentShuttleTimeLeft = TimeSpan.ParseExact(CurrentShuttle.CommulativeTime, @"mm\:ss", System.Globalization.CultureInfo.InvariantCulture,
-                                                  System.Globalization.TimeSpanStyles.None);
+            CurrentShuttleTimeLeft =
+                TimeSpan.ParseExact(
+                CurrentShuttle.CommulativeTime, @"mm\:ss",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.TimeSpanStyles.None) -
+                TimeSpan.ParseExact(
+                CurrentShuttle.StartTime, @"mm\:ss",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.TimeSpanStyles.None).Add(new TimeSpan(0, 0, -1));
+            //TimeSpan.FromSeconds(double.Parse(CurrentShuttle.LevelTime));
 
             await InvokeAsync(StateHasChanged);
         }
@@ -54,6 +63,19 @@ namespace web.Pages
         {
             TotalTime = TotalTime.Add(new TimeSpan(0, 0, 1));
             CurrentShuttleTimeLeft = CurrentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
+            _logger.LogDebug($"Time Left: {CurrentShuttleTimeLeft}");
+
+            PercentageRemaingInCurrentLevel = (
+                CurrentShuttleTimeLeft.TotalSeconds /
+                (TimeSpan.ParseExact(
+                CurrentShuttle.CommulativeTime, @"mm\:ss",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.TimeSpanStyles.None) -
+                TimeSpan.ParseExact(
+                CurrentShuttle.StartTime, @"mm\:ss",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.TimeSpanStyles.None).Add(new TimeSpan(0, 0, -1))).TotalSeconds) *
+                100;
 
             await InvokeAsync(StateHasChanged);
         }
@@ -63,7 +85,7 @@ namespace web.Pages
             var athlete = AthleteRepository.Data.FirstOrDefault(i => i.Id == id);
 
             athlete.Warned = true;
-            Logger.LogInformation($"Warned {athlete.Name}!");
+            _logger.LogInformation($"Warned {athlete.Name}!");
         }
 
         private void Stop(int id)
@@ -72,7 +94,7 @@ namespace web.Pages
 
             athlete.Result = $"{PreviousShuttle?.SpeedLevel}-{PreviousShuttle?.ShuttleNo}";
 
-            Logger.LogInformation($"Stopped! {athlete.Name}, Result: {athlete.Result}");
+            _logger.LogInformation($"Stopped! {athlete.Name}, Result: {athlete.Result}");
         }
     }
 }

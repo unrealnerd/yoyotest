@@ -7,6 +7,7 @@
     </div>
     <div class="row col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2 mt-3">
         <div class="row justify-content-center">
+            <web.Components.ProgressBar Percent="@PercentageRemaingInCurrentLevel"></web.Components.ProgressBar>
             <div class="circle">
                 @if (Started)
                 {
@@ -41,6 +42,7 @@
             </div>
         </div>
         <div class="col-4">
+            
             <div class="text-center border-left border-right">
                 TOTAL TIME
             </div>
@@ -53,7 +55,7 @@
                 TOTAL DISTANCE
             </div>
             <div class="text-center">
-                @($"{CurrentShuttle?.AccumulatedShuttleDistance} m")
+                @($"{PreviousShuttle?.AccumulatedShuttleDistance} m")
             </div>
         </div>
     </div>
@@ -99,3 +101,5 @@
 
     </div>
 </div>
+
+

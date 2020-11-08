@@ -187,11 +187,10 @@ app {
 }
 
 .circle {
-    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.2);
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 4px solid orange;
 }
 
 .circle div {
@@ -213,4 +212,24 @@ app {
     padding: 0px;
     border-style: solid;
 
+}
+
+
+#roundProgressBar circle {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+    stroke: #666;
+    stroke-width: 1em;
+}
+
+#roundProgressBar #bar {
+    stroke: #FF9F1E;
+}
+
+#roundProgressBar {
+    cursor: pointer;
+    display: block;
+    float: right;
+    position: absolute;
+    z-index: -1;
 }
