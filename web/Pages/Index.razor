@@ -12,13 +12,13 @@
                 {
                     <div id="stats">
                         <div class="mt-3">
-                            @($"Level {currentShuttle?.SpeedLevel}")
+                            @($"Level {CurrentShuttle?.SpeedLevel}")
                         </div>
                         <div>
-                            @($"Shuttle {currentShuttle?.ShuttleNo}")
+                            @($"Shuttle {CurrentShuttle?.ShuttleNo}")
                         </div>
                         <div>
-                            @($"{currentShuttle?.Speed} km/h")
+                            @($"{CurrentShuttle?.Speed} km/h")
                         </div>
                     </div>
                 }
@@ -37,7 +37,7 @@
                 NEXT SHUTTLE
             </div>
             <div class="text-center">
-                @($"{currentShuttleTimeLeft.ToString(@"mm\:ss")} s")
+                @($"{CurrentShuttleTimeLeft.ToString(@"mm\:ss")} s")
             </div>
         </div>
         <div class="col-4">
@@ -45,7 +45,7 @@
                 TOTAL TIME
             </div>
             <div class="text-center border-left border-right">
-                @($"{totalTime.ToString(@"hh\:mm")} m")
+                @($"{TotalTime.ToString(@"hh\:mm")} m")
             </div>
         </div>
         <div class="col-4">
@@ -53,24 +53,49 @@
                 TOTAL DISTANCE
             </div>
             <div class="text-center">
-                @($"{currentShuttle?.AccumulatedShuttleDistance} m")
+                @($"{CurrentShuttle?.AccumulatedShuttleDistance} m")
             </div>
         </div>
     </div>
-    <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-3 offset-md-2">
+    <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
+        <div class="col-12 border-bottom mb-3">
+            <p>Track</p>
+        </div>
+
+
         @for (int i = 0; i < AthleteRepository.Data.Count; i++)
         {
-            <div class="col-6">
-                <p>
-                    @($"{i+1}. {AthleteRepository.Data[i].Name}")
-                </p>
-            </div>
-            <div class="col-6">
-                <button class="btn btn-warning" disabled="@(AthleteRepository.Data[i].Warned)">Warn</button>
-                <button class="btn btn-danger">Stop</button>
-            </div>
+            int index = i;
+            <div class="row col-12 d-flex">
+                <div class="flex-grow-1">
+                    <p>
+                        @($"{i+1}. {AthleteRepository.Data[i].Name}")
+                    </p>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-warning btn-sm"
+                            disabled="@(AthleteRepository.Data[index].Warned)"
+                            @onclick="@(e=>Warn(AthleteRepository.Data[index].Id))">
+                        Warn
+                    </button>
+                </div>
+                <div class="col-2">
+                    @if (AthleteRepository.Data[index].Result == null)
+                    {
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="@(_=>Stop(AthleteRepository.Data[index].Id))">
+                            Stop
+                        </button>
+                    }
+                    else
+                    {
+                        <p class="text-right">@AthleteRepository.Data[index].Result</p>
+                    }
 
+                </div>
+            </div>
         }
+
+
     </div>
 </div>
-

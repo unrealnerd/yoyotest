@@ -18,7 +18,6 @@ namespace web.Data
             _logger = logger;
             _hostingEnvironment = environment;
             Data = LoadDataFromJsonFile(filePath);
-            //Data = LoadDataFromJsonFile("data/fitnessrating_beeptest.json");
         }
 
         private IList<T> LoadDataFromJsonFile(string filePath)
