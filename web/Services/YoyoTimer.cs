@@ -1,32 +1,53 @@
 using System;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace web.Services
 {
-    public class YoyoTimer
+    public class YoyoTimer : IDisposable
     {
         private Timer _timer;
+        private readonly ILogger<YoyoTimer> _logger;
+
         public event Action OnElapsed;
-        
-        public void SetTimer(double intervalMilliseconds, bool repeat)
+        public YoyoTimer(ILogger<YoyoTimer> logger)
         {
-            _timer = new Timer(intervalMilliseconds);
-            _timer.Elapsed += NotifyTimerElapsed;
-            _timer.AutoReset = repeat;
-            _timer.Enabled = true;
+
+            _logger = logger;
         }
 
+        public void Start()
+        {
+            _timer = new Timer(1000);
+            _timer.Elapsed += NotifyTimerElapsed;
+            _timer.Start();
+
+            _logger.LogDebug("Timer Started!");
+        }
+
+        public void Stop()
+        {
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Dispose();
+
+                _logger.LogDebug("Timer Stopped!");
+            }
+        }
 
         private void NotifyTimerElapsed(object source, ElapsedEventArgs e)
         {
             OnElapsed?.Invoke();
-            if (!_timer.AutoReset)
+        }
+
+        public void Dispose()
+        {
+            if (_timer != null)
             {
                 _timer.Stop();
                 _timer.Dispose();
-                _timer = null;
             }
         }
-
     }
 }

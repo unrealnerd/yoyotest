@@ -9,6 +9,7 @@ namespace web.Pages
     using web.Services;
     using Microsoft.Extensions.Logging;
     using System.Linq;
+    using System.Timers;
 
     public partial class Index
     {
@@ -24,58 +25,47 @@ namespace web.Pages
         private Shuttle PreviousShuttle { get; set; }
         private double PercentageRemaingInCurrentLevel { get; set; }
 
-        private void Start()
+        protected override Task OnInitializedAsync()
         {
-            YoyoTimer.SetTimer(1000, true);
-            YoyoTimer.OnElapsed += async delegate
-            {
-                await Tick();
-            };
-            YoyoDataService.OnShuttleChanged += async (newShuttle) =>
-            {
+            YoyoTimer.Stop();
+            return base.OnInitializedAsync();
+        }
 
-                await UpdateShuttle(newShuttle);
-                _logger.LogDebug("shuttle changed");
-            };
-            YoyoDataService.Start();
+        private void StartTimer()
+        {
+            YoyoTimer.Start();
+            YoyoTimer.OnElapsed += Tick;
             Started = true;
         }
 
-        private async Task UpdateShuttle(Shuttle newShuttle)
+        private async void UpdateShuttle()
         {
+            var newShuttle = YoyoDataService.CheckForMatchingShuttle(TotalTime);
+
+            if (newShuttle == null) return;
+
+            _logger.LogDebug("shuttle changed");
+
             PreviousShuttle = CurrentShuttle;
             CurrentShuttle = newShuttle;
-            CurrentShuttleTimeLeft =
-                TimeSpan.ParseExact(
-                CurrentShuttle.CommulativeTime, @"mm\:ss",
-                System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.TimeSpanStyles.None) -
-                TimeSpan.ParseExact(
-                CurrentShuttle.StartTime, @"mm\:ss",
-                System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.TimeSpanStyles.None).Add(new TimeSpan(0, 0, -1));
-            //TimeSpan.FromSeconds(double.Parse(CurrentShuttle.LevelTime));
+            CurrentShuttleTimeLeft = CurrentShuttle.CommulativeTime - CurrentShuttle.StartTime;
 
             await InvokeAsync(StateHasChanged);
         }
 
-        private async Task Tick()
+        private async void Tick()
         {
-            TotalTime = TotalTime.Add(new TimeSpan(0, 0, 1));
-            CurrentShuttleTimeLeft = CurrentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
+            UpdateShuttle();
+
+            _logger.LogDebug($"Total Time: {TotalTime}");
             _logger.LogDebug($"Time Left: {CurrentShuttleTimeLeft}");
 
             PercentageRemaingInCurrentLevel = (
                 CurrentShuttleTimeLeft.TotalSeconds /
-                (TimeSpan.ParseExact(
-                CurrentShuttle.CommulativeTime, @"mm\:ss",
-                System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.TimeSpanStyles.None) -
-                TimeSpan.ParseExact(
-                CurrentShuttle.StartTime, @"mm\:ss",
-                System.Globalization.CultureInfo.InvariantCulture,
-                System.Globalization.TimeSpanStyles.None).Add(new TimeSpan(0, 0, -1))).TotalSeconds) *
-                100;
+                (CurrentShuttle.CommulativeTime - CurrentShuttle.StartTime).TotalSeconds) * 100;
+
+            TotalTime = TotalTime.Add(new TimeSpan(0, 0, 1));
+            CurrentShuttleTimeLeft = CurrentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
 
             await InvokeAsync(StateHasChanged);
         }
@@ -96,5 +86,6 @@ namespace web.Pages
 
             _logger.LogInformation($"Stopped! {athlete.Name}, Result: {athlete.Result}");
         }
+
     }
 }

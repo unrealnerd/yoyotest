@@ -25,47 +25,47 @@
                 }
                 else
                 {
-                    <button id="playButton" class="mt-4 ml-5 oi oi-media-play" @onclick="Start">
+                    <button id="playButton" class="mt-4 ml-5 oi oi-media-play" @onclick="StartTimer">
                     </button>
                 }
 
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
-        <div class="col-4">
-            <div class="text-center">
-                NEXT SHUTTLE
+        <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
+            <div class="col-4">
+                <div class="text-center">
+                    NEXT SHUTTLE
+                </div>
+                <div class="text-center">
+                    @($"{CurrentShuttleTimeLeft.ToString(@"mm\:ss")} s")
+                </div>
             </div>
-            <div class="text-center">
-                @($"{CurrentShuttleTimeLeft.ToString(@"mm\:ss")} s")
+            <div class="col-4">
+
+                <div class="text-center border-left border-right">
+                    TOTAL TIME
+                </div>
+                <div class="text-center border-left border-right">
+                    @($"{TotalTime.ToString(@"hh\:mm")} m")
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="text-center">
+                    TOTAL DISTANCE
+                </div>
+                <div class="text-center">
+                    @($"{PreviousShuttle?.AccumulatedShuttleDistance} m")
+                </div>
             </div>
         </div>
-        <div class="col-4">
-            
-            <div class="text-center border-left border-right">
-                TOTAL TIME
+        <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
+            <div class="col-12 border-bottom mb-3">
+                <p>Track</p>
             </div>
-            <div class="text-center border-left border-right">
-                @($"{TotalTime.ToString(@"hh\:mm")} m")
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="text-center">
-                TOTAL DISTANCE
-            </div>
-            <div class="text-center">
-                @($"{PreviousShuttle?.AccumulatedShuttleDistance} m")
-            </div>
-        </div>
-    </div>
-    <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
-        <div class="col-12 border-bottom mb-3">
-            <p>Track</p>
-        </div>
 
 
-        @for (int i = 0; i < AthleteRepository.Data.Count; i++)
+            @for (int i = 0; i < AthleteRepository.Data.Count; i++)
         {
             int index = i;
             <div class="row col-12 d-flex">
@@ -75,17 +75,15 @@
                     </p>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-warning btn-sm"
-                            disabled="@(AthleteRepository.Data[index].Warned)"
-                            @onclick="@(e=>Warn(AthleteRepository.Data[index].Id))">
+                    <button class="btn btn-warning btn-sm" disabled="@(AthleteRepository.Data[index].Warned)"
+                        @onclick="@(e=>Warn(AthleteRepository.Data[index].Id))">
                         Warn
                     </button>
                 </div>
                 <div class="col-2">
                     @if (AthleteRepository.Data[index].Result == null)
                     {
-                        <button class="btn btn-danger btn-sm"
-                                @onclick="@(_=>Stop(AthleteRepository.Data[index].Id))">
+                        <button class="btn btn-danger btn-sm" @onclick="@(_=>Stop(AthleteRepository.Data[index].Id))">
                             Stop
                         </button>
                     }
@@ -101,5 +99,3 @@
 
     </div>
 </div>
-
-

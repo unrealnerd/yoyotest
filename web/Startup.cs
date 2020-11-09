@@ -33,7 +33,7 @@ namespace web
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<YoyoTimer>();
+            services.AddTransient<YoyoTimer>();
             services.AddTransient<YoyoDataService>();
 
             services.Configure<FileRepositoryOptions>(Configuration.GetSection(FileRepositoryOptions.FileRepository));

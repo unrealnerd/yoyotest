@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json.Serialization;
+using web.Utils;
 
 namespace web.Models
 {
@@ -9,8 +11,12 @@ namespace web.Models
         public string ShuttleNo { get; set; }
         public string Speed { get; set; }
         public string LevelTime { get; set; }
-        public string CommulativeTime { get; set; }
-        public string StartTime { get; set; }
+
+        [JsonConverter(typeof(StringToTimeSpanConvertor))]
+        public TimeSpan CommulativeTime { get; set; }
+
+        [JsonConverter(typeof(StringToTimeSpanConvertor))]
+        public TimeSpan StartTime { get; set; }
         public string ApproxVo2Max { get; set; }
 
     }
