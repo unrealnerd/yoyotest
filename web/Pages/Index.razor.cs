@@ -15,7 +15,6 @@ namespace web.Pages
     {
         [Inject] YoyoTimer YoyoTimer { get; set; }
         [Inject] YoyoDataService YoyoDataService { get; set; }
-        [Inject] Repository<Athlete> AthleteRepository { get; set; }
         [Inject] ILogger<Index> _logger { get; set; }
 
         public bool Started { get; set; } = false;
@@ -44,7 +43,7 @@ namespace web.Pages
 
             if (newShuttle == null) return;
 
-            _logger.LogDebug("shuttle changed");
+            _logger.LogDebug("Shuttle Changed!");
 
             PreviousShuttle = CurrentShuttle;
             CurrentShuttle = newShuttle;
@@ -60,31 +59,15 @@ namespace web.Pages
             _logger.LogDebug($"Total Time: {TotalTime}");
             _logger.LogDebug($"Time Left: {CurrentShuttleTimeLeft}");
 
-            PercentageRemaingInCurrentLevel = (
-                CurrentShuttleTimeLeft.TotalSeconds /
-                (CurrentShuttle.CommulativeTime - CurrentShuttle.StartTime).TotalSeconds) * 100;
+            PercentageRemaingInCurrentLevel =
+                (CurrentShuttleTimeLeft.TotalSeconds /
+                    (CurrentShuttle.CommulativeTime - CurrentShuttle.StartTime)
+                .TotalSeconds) * 100;
 
             TotalTime = TotalTime.Add(new TimeSpan(0, 0, 1));
             CurrentShuttleTimeLeft = CurrentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
 
             await InvokeAsync(StateHasChanged);
-        }
-
-        private void Warn(int id)
-        {
-            var athlete = AthleteRepository.Data.FirstOrDefault(i => i.Id == id);
-
-            athlete.Warned = true;
-            _logger.LogInformation($"Warned {athlete.Name}!");
-        }
-
-        private void Stop(int id)
-        {
-            var athlete = AthleteRepository.Data.FirstOrDefault(i => i.Id == id);
-
-            athlete.Result = $"{PreviousShuttle?.SpeedLevel}-{PreviousShuttle?.ShuttleNo}";
-
-            _logger.LogInformation($"Stopped! {athlete.Name}, Result: {athlete.Result}");
         }
 
     }

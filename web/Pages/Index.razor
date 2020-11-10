@@ -7,95 +7,24 @@
     </div>
     <div class="row col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2 mt-3">
         <div class="row justify-content-center">
-            <web.Components.ProgressBar Percent="@PercentageRemaingInCurrentLevel"></web.Components.ProgressBar>
-            <div class="circle">
-                @if (Started)
-                {
-                    <div id="stats">
-                        <div class="mt-3">
-                            @($"Level {CurrentShuttle?.SpeedLevel}")
-                        </div>
-                        <div>
-                            @($"Shuttle {CurrentShuttle?.ShuttleNo}")
-                        </div>
-                        <div>
-                            @($"{CurrentShuttle?.Speed} km/h")
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <button id="playButton" class="mt-4 ml-5 oi oi-media-play" @onclick="StartTimer">
-                    </button>
-                }
-
-                </div>
-            </div>
+            <web.Components.ProgressBar Percent="@PercentageRemaingInCurrentLevel">
+            </web.Components.ProgressBar>
+            <web.Components.ShuttleStatsDial SpeedLevel="@CurrentShuttle?.SpeedLevel"
+                                             ShuttleNumber="@CurrentShuttle?.ShuttleNo"
+                                             Speed="@CurrentShuttle?.Speed"
+                                             Started="Started"
+                                             StartTimer="StartTimer">
+            </web.Components.ShuttleStatsDial>
         </div>
-        <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
-            <div class="col-4">
-                <div class="text-center">
-                    NEXT SHUTTLE
-                </div>
-                <div class="text-center">
-                    @($"{CurrentShuttleTimeLeft.ToString(@"mm\:ss")} s")
-                </div>
-            </div>
-            <div class="col-4">
-
-                <div class="text-center border-left border-right">
-                    TOTAL TIME
-                </div>
-                <div class="text-center border-left border-right">
-                    @($"{TotalTime.ToString(@"hh\:mm")} m")
-                </div>
-            </div>
-            <div class="col-4">
-                <div class="text-center">
-                    TOTAL DISTANCE
-                </div>
-                <div class="text-center">
-                    @($"{PreviousShuttle?.AccumulatedShuttleDistance} m")
-                </div>
-            </div>
-        </div>
-        <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
-            <div class="col-12 border-bottom mb-3">
-                <p>Track</p>
-            </div>
-
-
-            @for (int i = 0; i < AthleteRepository.Data.Count; i++)
-        {
-            int index = i;
-            <div class="row col-12 d-flex">
-                <div class="flex-grow-1">
-                    <p>
-                        @($"{i+1}. {AthleteRepository.Data[i].Name}")
-                    </p>
-                </div>
-                <div class="col-2">
-                    <button class="btn btn-warning btn-sm" disabled="@(AthleteRepository.Data[index].Warned)"
-                        @onclick="@(e=>Warn(AthleteRepository.Data[index].Id))">
-                        Warn
-                    </button>
-                </div>
-                <div class="col-2">
-                    @if (AthleteRepository.Data[index].Result == null)
-                    {
-                        <button class="btn btn-danger btn-sm" @onclick="@(_=>Stop(AthleteRepository.Data[index].Id))">
-                            Stop
-                        </button>
-                    }
-                    else
-                    {
-                        <p class="text-right">@AthleteRepository.Data[index].Result</p>
-                    }
-
-                </div>
-            </div>
-        }
-
-
+    </div>
+    <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
+        <web.Components.ShuttleStats AccumulatedShuttleDistance="@PreviousShuttle?.AccumulatedShuttleDistance"
+                                     CurrentShuttleTimeLeft="CurrentShuttleTimeLeft"
+                                     TotalTime="TotalTime">
+        </web.Components.ShuttleStats>
+    </div>
+    <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
+        <web.Components.AthletesList PreviousShuttle="PreviousShuttle">
+        </web.Components.AthletesList>
     </div>
 </div>

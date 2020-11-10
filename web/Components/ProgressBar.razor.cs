@@ -6,7 +6,7 @@ namespace web.Components
     {
         private double _percent;
 
-        [ParameterAttribute]
+        [Parameter]
         public double Percent
         {
             get

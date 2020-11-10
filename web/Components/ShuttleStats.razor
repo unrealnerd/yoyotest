@@ -1,0 +1,26 @@
+﻿
+    <div class="col-4">
+        <div class="text-center">
+            NEXT SHUTTLE
+        </div>
+        <div class="text-center">
+            @($"{CurrentShuttleTimeLeft.ToString(@"mm\:ss")} s")
+        </div>
+    </div>
+    <div class="col-4">
+
+        <div class="text-center border-left border-right">
+            TOTAL TIME
+        </div>
+        <div class="text-center border-left border-right">
+            @($"{TotalTime.ToString(@"hh\:mm")} m")
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="text-center">
+            TOTAL DISTANCE
+        </div>
+        <div class="text-center">
+            @($"{AccumulatedShuttleDistance} m")
+        </div>
+    </div>
