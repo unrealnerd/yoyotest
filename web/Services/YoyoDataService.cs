@@ -13,34 +13,30 @@ namespace web.Services
     public class YoyoDataService
     {
         private readonly ILogger<YoyoDataService> _logger;
-        private readonly List<Shuttle> _shuttles;
-        private readonly List<Athlete> _athletes;
 
-        public delegate void ShuttleChangedHandler(Shuttle shuttle);
+        public List<Athlete> Athletes { get; }
 
-        public event ShuttleChangedHandler OnShuttleChanged;
+        public List<Shuttle> Shuttles { get; }
 
-        public YoyoDataService(ILogger<YoyoDataService> logger, Repository<Shuttle> shuttleRepo, Repository<Athlete> athleteRepo)
+        public YoyoDataService(ILogger<YoyoDataService> logger, IRepository<Shuttle> shuttleRepo, IRepository<Athlete> athleteRepo)
         {
             _logger = logger;
-            _shuttles = shuttleRepo.Data.ToList();
-            _athletes = athleteRepo.Data.ToList();
+            Shuttles = shuttleRepo?.Data.ToList();
+            Athletes = athleteRepo?.Data.ToList();
         }
 
         public Shuttle CheckForMatchingShuttle(TimeSpan currentTime)
         {
-            var matchedShuttle = _shuttles.FirstOrDefault(s => s.StartTime == currentTime);
+            var matchedShuttle = Shuttles?.FirstOrDefault(s => s.StartTime == currentTime);
             return matchedShuttle;
         }
 
-        public List<Athlete> GetAthletes()
+        /// <summary>
+        /// Returns a Distinct combination of Speed & ShuttleNumber as a Tuple, sorted by shuttle first then Speed to show Yoyo test result as Speed-ShuttleNumber
+        /// </summary>
+        public List<(int,int)> GetShuttleResults()
         {
-            return _athletes;
-        }
-
-        public List<Shuttle> GetShuttles()
-        {
-            return _shuttles;
+            return Shuttles?.Select(x => (x.SpeedLevel, x.ShuttleNo)).Distinct().OrderBy(y => y.ShuttleNo).ThenBy(z => z.SpeedLevel).ToList();
         }
 
     }

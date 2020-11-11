@@ -1,5 +1,11 @@
-﻿<div class="circle">
-    @if (Started)
+﻿<div class="circle @(Ended? "bg-danger p-3":"")">
+    @if (Ended)
+    {
+        <div class="mt-3 text-white">
+            <span>Test Ended. Athletes Results is as below</span>
+        </div>
+    }
+    else if (Started)
     {
         <div id="stats">
             <div class="mt-3">
@@ -15,9 +21,8 @@
     }
     else
     {
-        <button id="playButton" class="mt-4 ml-5 oi oi-media-play"
-                @onclick="StartTimer">
+        <button id="playButton" class="mt-4 ml-5 oi oi-media-play" @onclick="StartTimer">
         </button>
     }
 
-</div>
+    </div>

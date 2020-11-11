@@ -8,11 +8,11 @@ using System.Text.Json;
 
 namespace web.Data
 {
-    public class Repository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ILogger<Repository<T>> _logger;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        public IList<T> Data;
+        public IList<T> Data { get; set; }
         public Repository(ILogger<Repository<T>> logger, IWebHostEnvironment environment, string filePath)
         {
             _logger = logger;

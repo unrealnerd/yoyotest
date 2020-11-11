@@ -14,8 +14,6 @@ namespace web.Components
 {
     public partial class AthletesList
     {
-
-
         [Inject]
         private YoyoDataService YoyoDataService { get; set; }
 
@@ -25,14 +23,23 @@ namespace web.Components
         [Parameter]
         public Shuttle PreviousShuttle { get; set; }
 
+        [Parameter]
+        public bool Started { get; set; }
+
+        [Parameter]
+        public bool Ended { get; set; }
+
         public List<AthleteViewModel> Athletes { get; set; }
         public List<(int, int)> ShuttleResults { get; set; }
 
+        [Parameter]
+        public Action OnLastAthleteStopped { get; set; }
+
         protected override Task OnInitializedAsync()
         {
-            Athletes = YoyoDataService.GetAthletes().Select(x => x.ToAthleteViewModel()).ToList();
+            Athletes = YoyoDataService.Athletes.Select(x => x.ToAthleteViewModel()).ToList();
 
-            ShuttleResults = YoyoDataService.GetShuttles().Select(x => (x.SpeedLevel, x.ShuttleNo)).Distinct().OrderBy(y => y.ShuttleNo).ThenBy(z => z.SpeedLevel).ToList();
+            ShuttleResults = YoyoDataService.GetShuttleResults();
 
             return base.OnInitializedAsync();
         }
@@ -52,6 +59,11 @@ namespace web.Components
             athlete.Result = $"{PreviousShuttle?.SpeedLevel}-{PreviousShuttle?.ShuttleNo}";
 
             Logger.LogInformation($"Stopped! {athlete.Name}, Result: {athlete.Result}");
+
+            if (!Athletes.Any(x => x.Result == null))
+            {
+                OnLastAthleteStopped?.Invoke();
+            }
         }
 
     }

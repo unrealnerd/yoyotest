@@ -22,7 +22,7 @@ namespace web.Utils
             }
             else
             {
-                return new TimeSpan(0, 0, 0);
+                throw new InvalidCastException();
             }
         }
 

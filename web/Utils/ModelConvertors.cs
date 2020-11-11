@@ -13,24 +13,10 @@ namespace web.Utils
         {
             return new AthleteViewModel
             {
-                CanEdit = false,
                 Id = athlete.Id,
                 Name = athlete.Name,
                 Warned = false
             };
         }
-
-        //public static ShuttleResultViewModel ToShuttleResultViewModel(this List<Shuttle> shuttles)
-        //{
-        //    foreach (var item in shuttles)
-        //    {
-
-        //    }
-            
-        //    return new ShuttleResultViewModel
-        //    {
-        //        UniqueShuttleNumbers = shuttles.
-        //    }
-        //}
     }
 }

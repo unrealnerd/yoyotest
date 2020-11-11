@@ -19,7 +19,7 @@ namespace web.Utils
             }
             else
             {
-                return -99999;
+                throw new InvalidCastException();
             }
         }
 

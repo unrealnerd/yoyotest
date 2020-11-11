@@ -10,6 +10,9 @@ namespace web.Components
     {
         [Parameter]
         public bool Started { get; set; }
+        
+        [Parameter]
+        public bool Ended { get; set; }
 
         [Parameter]
         public int? SpeedLevel { get; set; }

@@ -10,7 +10,10 @@ namespace web.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Warned { get; set; }
+
+        /// <summary>
+        /// If this Porperty is null it means the athlete is asked to stop. 
+        /// </summary>
         public string Result { get; set; }
-        public bool CanEdit { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace web.Pages
         [Inject] ILogger<Index> _logger { get; set; }
 
         public bool Started { get; set; } = false;
+        public bool Ended { get; set; } = false;
         private TimeSpan TotalTime { get; set; }
         private TimeSpan CurrentShuttleTimeLeft { get; set; }
         private Shuttle CurrentShuttle { get; set; }
@@ -35,6 +36,14 @@ namespace web.Pages
             YoyoTimer.Start();
             YoyoTimer.OnElapsed += Tick;
             Started = true;
+        }
+
+        private void EndTest()
+        {
+            YoyoTimer.Stop();
+            Ended = true;
+            CurrentShuttleTimeLeft = new TimeSpan(0, 0, 0);
+            InvokeAsync(StateHasChanged);
         }
 
         private async void UpdateShuttle()
@@ -67,6 +76,10 @@ namespace web.Pages
             TotalTime = TotalTime.Add(new TimeSpan(0, 0, 1));
             CurrentShuttleTimeLeft = CurrentShuttleTimeLeft.Add(new TimeSpan(0, 0, -1));
 
+            if (CurrentShuttleTimeLeft < new TimeSpan(0, 0, -1))
+            {
+                EndTest();
+            }
             await InvokeAsync(StateHasChanged);
         }
 

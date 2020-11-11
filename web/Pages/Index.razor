@@ -7,24 +7,25 @@
     </div>
     <div class="row col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2 mt-3">
         <div class="row justify-content-center">
-            <web.Components.ProgressBar Percent="@PercentageRemaingInCurrentLevel">
-            </web.Components.ProgressBar>
-            <web.Components.ShuttleStatsDial SpeedLevel="@CurrentShuttle?.SpeedLevel"
-                                             ShuttleNumber="@CurrentShuttle?.ShuttleNo"
-                                             Speed="@CurrentShuttle?.Speed"
-                                             Started="Started"
-                                             StartTimer="StartTimer">
-            </web.Components.ShuttleStatsDial>
+            @if (!Ended)
+            {
+                <web.Components.ProgressBar Percent="@PercentageRemaingInCurrentLevel">
+                </web.Components.ProgressBar>
+            }
+                <web.Components.ShuttleStatsDial SpeedLevel="@CurrentShuttle?.SpeedLevel"
+                    ShuttleNumber="@CurrentShuttle?.ShuttleNo" Speed="@CurrentShuttle?.Speed" Started="Started"
+                    StartTimer="StartTimer" Ended="@Ended">
+                </web.Components.ShuttleStatsDial>
+            </div>
+        </div>
+        <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
+            <web.Components.ShuttleStats AccumulatedShuttleDistance="@CurrentShuttle?.AccumulatedShuttleDistance"
+                CurrentShuttleTimeLeft="CurrentShuttleTimeLeft" TotalTime="TotalTime">
+            </web.Components.ShuttleStats>
+        </div>
+        <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
+            <web.Components.AthletesList PreviousShuttle="PreviousShuttle" OnLastAthleteStopped="EndTest"
+                Started="@Started" Ended="@Ended">
+            </web.Components.AthletesList>
         </div>
     </div>
-    <div class="row mt-4 col-lg-8 col-md-8 justify-content-center offset-lg-2 offset-md-2">
-        <web.Components.ShuttleStats AccumulatedShuttleDistance="@PreviousShuttle?.AccumulatedShuttleDistance"
-                                     CurrentShuttleTimeLeft="CurrentShuttleTimeLeft"
-                                     TotalTime="TotalTime">
-        </web.Components.ShuttleStats>
-    </div>
-    <div class="row mt-5 col-lg-6 col-md-8 justify-content-center offset-lg-3 offset-md-2">
-        <web.Components.AthletesList PreviousShuttle="PreviousShuttle">
-        </web.Components.AthletesList>
-    </div>
-</div>
