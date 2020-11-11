@@ -15,7 +15,7 @@ namespace web.Components
         public TimeSpan TotalTime { get; set; }
         
         [Parameter]
-        public string AccumulatedShuttleDistance { get; set; }
+        public int AccumulatedShuttleDistance { get; set; }
 
     }
 }

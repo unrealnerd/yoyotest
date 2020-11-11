@@ -37,16 +37,17 @@ namespace web
             services.AddTransient<YoyoDataService>();
 
             services.Configure<FileRepositoryOptions>(Configuration.GetSection(FileRepositoryOptions.FileRepository));
-            
-            services.AddSingleton(sp => new Repository<Shuttle>(
-                logger: sp.GetService<ILogger<Repository<Shuttle>>>(),
+
+            services.AddSingleton<IDataLoader<Shuttle>>(sp => new JsonFileDataLoader<Shuttle>(
                 environment: sp.GetService<IWebHostEnvironment>(),
-                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Shuttles));
-            
-            services.AddSingleton(sp => new Repository<Athlete>(
-                logger: sp.GetService<ILogger<Repository<Athlete>>>(),
+                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Shuttles
+                ));
+            services.AddSingleton<IDataLoader<Athlete>>(sp => new JsonFileDataLoader<Athlete>(
                 environment: sp.GetService<IWebHostEnvironment>(),
-                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Athletes));
+                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Athletes
+                ));
+
+            services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

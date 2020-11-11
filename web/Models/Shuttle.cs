@@ -6,7 +6,8 @@ namespace web.Models
 {
     public class Shuttle
     {
-        public string AccumulatedShuttleDistance { get; set; }
+        [JsonConverter(typeof(StringToIntConverter))]
+        public int AccumulatedShuttleDistance { get; set; }
         
         [JsonConverter(typeof(StringToIntConverter))]
         public int SpeedLevel { get; set; }
