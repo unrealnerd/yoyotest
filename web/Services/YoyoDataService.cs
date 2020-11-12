@@ -34,7 +34,7 @@ namespace web.Services
         /// <summary>
         /// Returns a Distinct combination of Speed & ShuttleNumber as a Tuple, sorted by shuttle first then Speed to show Yoyo test result as Speed-ShuttleNumber
         /// </summary>
-        public List<(int,int)> GetShuttleResults()
+        public List<(int SpeeLevel,int ShuttleNo)> GetShuttleResults()
         {
             return Shuttles?.Select(x => (x.SpeedLevel, x.ShuttleNo)).Distinct().OrderBy(y => y.ShuttleNo).ThenBy(z => z.SpeedLevel).ToList();
         }

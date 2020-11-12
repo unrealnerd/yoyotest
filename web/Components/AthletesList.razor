@@ -13,16 +13,21 @@
                 @($"{i+1}. {Athletes[i].Name}")
             </p>
         </div>
-        <div class="pl-2">
-            <button class="btn btn-warning btn-sm" disabled="@(Athletes[index].Warned || !Started)"
-                    @onclick="@(_=>Warn(Athletes[index].Id))">
-                Warn
-            </button>
-        </div>
+
+        @if (Athletes[index].Result == null)
+        {
+            <div class="pl-2">
+                <button class="btn btn-warning btn-sm" disabled="@(Athletes[index].Warned || !Started)"
+                        @onclick="@(_=>Warn(Athletes[index].Id))">
+                    Warn
+                </button>
+            </div>
+        }
+
         <div class="col-3 pl-4 pr-0">
             @if (Athletes[index].Result == null && !Ended)
             {
-                <button class="btn btn-danger btn-sm float-right" 
+                <button class="btn btn-danger btn-sm float-right"
                         @onclick="@(_=>StopAthlete(Athletes[index].Id))"
                         disabled="@(!Athletes[index].Warned)">
                     Stop
@@ -33,7 +38,7 @@
                 <select class="form-control form-control-sm" @bind="@Athletes[index].Result">
                     @foreach (var item in ShuttleResults)
                     {
-                        <option>@($"{item.Item1}-{item.Item2}")</option>
+                        <option>@($"{item.SpeedLevel}-{item.ShuttleNo}")</option>
                     }
                 </select>
             }

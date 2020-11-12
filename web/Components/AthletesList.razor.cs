@@ -30,7 +30,7 @@ namespace web.Components
         public bool Ended { get; set; }
 
         public List<AthleteViewModel> Athletes { get; set; }
-        public List<(int, int)> ShuttleResults { get; set; }
+        public List<(int SpeedLevel, int ShuttleNo)> ShuttleResults { get; set; }
 
         [Parameter]
         public Action OnLastAthleteStopped { get; set; }
