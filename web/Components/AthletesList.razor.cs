@@ -29,7 +29,7 @@ namespace web.Components
         [Parameter]
         public bool Ended { get; set; }
 
-        public List<AthleteViewModel> Athletes { get; set; }
+        public IList<AthleteViewModel> Athletes { get; set; }
         public List<(int SpeedLevel, int ShuttleNo)> ShuttleResults { get; set; }
 
         [Parameter]
@@ -63,6 +63,7 @@ namespace web.Components
             if (!Athletes.Any(x => x.Result == null))
             {
                 OnLastAthleteStopped?.Invoke();
+                Logger.LogInformation($"Last Athelete to be Stopped!");
             }
         }
 
