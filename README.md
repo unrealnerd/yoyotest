@@ -1,5 +1,6 @@
 ## YO-YO APP
 
+- Project structure looks is web has all the UI related functionalities and Repository is the one which talks to the json files in our case and the Business is the project which ties the repo and web projects. 
 - Loads the data from the json file which can be configured in app settings file like this
     ```js
     "FileRepository": {

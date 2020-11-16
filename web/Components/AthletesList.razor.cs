@@ -11,7 +11,7 @@ using Yoyo.Business.Services;
 
 namespace web.Components
 {
-    public partial class AthletesList
+    public partial class AthletesList : ComponentBase
     {
         [Inject]
         private YoyoDataService YoyoDataService { get; set; }
