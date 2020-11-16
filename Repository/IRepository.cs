@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace web.Data
+namespace Repository
 {
     public interface IRepository<T> where T : class
     {

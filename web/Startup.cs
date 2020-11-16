@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Repository;
 using web.Data;
 using web.Models;
 using web.Services;
@@ -38,14 +40,8 @@ namespace web
 
             services.Configure<FileRepositoryOptions>(Configuration.GetSection(FileRepositoryOptions.FileRepository));
 
-            services.AddSingleton<IDataLoader<Shuttle>>(sp => new JsonFileDataLoader<Shuttle>(
-                environment: sp.GetService<IWebHostEnvironment>(),
-                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Shuttles
-                ));
-            services.AddSingleton<IDataLoader<Athlete>>(sp => new JsonFileDataLoader<Athlete>(
-                environment: sp.GetService<IWebHostEnvironment>(),
-                filePath: sp.GetService<IOptions<FileRepositoryOptions>>().Value.Athletes
-                ));
+            services.AddSingleton<IDataLoader<Shuttle>>(sp => new JsonFileDataLoader<Shuttle>(sp.GetService<IOptions<FileRepositoryOptions>>().Value.Shuttles));
+            services.AddSingleton<IDataLoader<Athlete>>(sp => new JsonFileDataLoader<Athlete>(sp.GetService<IOptions<FileRepositoryOptions>>().Value.Athletes));
 
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
         }
@@ -60,7 +56,6 @@ namespace web
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

@@ -1,12 +1,7 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
 
-namespace web.Data
+namespace Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -15,8 +10,5 @@ namespace web.Data
         {
             Data = dataLoader.LoadData();
         }
-        
     }
-
-    
 }
