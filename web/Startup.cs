@@ -15,8 +15,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Repository;
 using web.Data;
-using web.Models;
-using web.Services;
+using Yoyo.Business.Models;
+using Yoyo.Business.Services;
 
 namespace web
 {

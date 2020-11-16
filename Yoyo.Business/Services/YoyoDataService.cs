@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Repository;
-using web.Data;
-using web.Models;
+using Yoyo.Business.Models;
 
-namespace web.Services
+namespace Yoyo.Business.Services
 {
     public class YoyoDataService
     {

@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace web.Utils
+namespace Yoyo.Utils
 {
     public class StringToTimeSpanConvertor : JsonConverter<TimeSpan>
     {

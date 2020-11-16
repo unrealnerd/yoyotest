@@ -1,11 +1,10 @@
 using Moq;
+using Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using web.Data;
-using web.Models;
-using web.Services;
 using Xunit;
+using Yoyo.Business.Models;
+using Yoyo.Business.Services;
 
 namespace tests
 {

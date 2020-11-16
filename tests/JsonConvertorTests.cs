@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
-using web.Models;
 using Xunit;
+using Yoyo.Business.Models;
 
 namespace tests
 {

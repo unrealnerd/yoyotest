@@ -2,7 +2,7 @@ using System;
 using System.Timers;
 using Microsoft.Extensions.Logging;
 
-namespace web.Services
+namespace Yoyo.Business.Services
 {
     public class YoyoTimer : IDisposable
     {

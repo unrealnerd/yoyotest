@@ -1,8 +1,8 @@
 using System;
 using System.Text.Json.Serialization;
-using web.Utils;
+using Yoyo.Utils;
 
-namespace web.Models
+namespace Yoyo.Business.Models
 {
     public class Shuttle
     {
